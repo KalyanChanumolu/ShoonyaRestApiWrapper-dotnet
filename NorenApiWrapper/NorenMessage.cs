@@ -353,7 +353,8 @@ namespace NorenRestApiWrapper
 
     public class MWList : NorenMessage
     {
-        //no params
+        public string uid;
+        public string wlname;
     }
     public class MWListResponse : NorenResponseMsg
     {
@@ -411,6 +412,38 @@ namespace NorenRestApiWrapper
         public string uid;
         public string wlname;
         public string scrips;
+    }
+
+    public class PlaceGTTOrder : NorenMessage
+    {
+        public string uid;
+        public string tsym;
+        public string exch;
+        public string ai_t;
+        public string validity;
+        public string d;
+        public string remarks;
+        public string trantype;
+        public string prctyp;
+        public string prd;
+        public string ret;
+        public string actid;
+        public string qty;
+        public string prc;
+        public string dscqty;
+
+        public override string toJson()
+        {
+            tsym = HttpUtility.UrlEncode(tsym);
+            remarks = HttpUtility.UrlEncode(remarks);
+            return base.toJson();
+        }
+    }
+
+    public class PlaceGTTOrderResponse : NorenResponseMsg
+    {
+        public string request_time;
+        public string norenordno;
     }
 
     public class PlaceOrder : NorenMessage

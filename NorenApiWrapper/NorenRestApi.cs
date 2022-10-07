@@ -20,7 +20,7 @@ namespace NorenRestApiWrapper
     /// only after this call back feed and orders are to be subscribed
     /// </summary>
     /// <param name="msg"></param>
-    public delegate void OnStreamConnect(NorenStreamMessage msg);    
+    public delegate void OnStreamConnect(NorenStreamMessage msg);
     public delegate void OnCloseHandler();
     public delegate void OnErrorHandler(string Message);
 
@@ -28,11 +28,11 @@ namespace NorenRestApiWrapper
     {
         RESTClient rClient;
         NorenWebSocket wsclient;
-        
+
         LoginResponse loginResp;
         LoginMessage loginReq;
 
-        
+
         public OnResponse SessionCloseCallback
         {
             set
@@ -41,8 +41,8 @@ namespace NorenRestApiWrapper
             }
         }
         public NorenRestApi()
-        {            
-            rClient = new RESTClient();            
+        {
+            rClient = new RESTClient();
         }
 
         public string UserToken
@@ -51,7 +51,7 @@ namespace NorenRestApiWrapper
             {
                 return loginResp?.susertoken;
             }
-        } 
+        }
 
         private string getJKey
         {
@@ -61,7 +61,7 @@ namespace NorenRestApiWrapper
             }
         }
         #region response handlers
-        
+
         internal void OnLoginResponseNotify(NorenResponseMsg responseMsg)
         {
             loginResp = responseMsg as LoginResponse;
@@ -94,11 +94,11 @@ namespace NorenRestApiWrapper
         /// <param name="endPoint"></param>
         /// <param name="login"></param>
         /// <returns></returns>
-        public bool SendLogin(OnResponse response, string endPoint,LoginMessage login)
+        public bool SendLogin(OnResponse response, string endPoint, LoginMessage login)
         {
             loginReq = login;
             login.pwd = ComputeSha256Hash(login.pwd);
-            
+
 
             login.appkey = ComputeSha256Hash(login.uid + "|" + login.appkey);
 
@@ -121,7 +121,7 @@ namespace NorenRestApiWrapper
             loginReq.pwd = pwd;
             loginReq.source = "API";
 
-            loginResp = new LoginResponse();                      
+            loginResp = new LoginResponse();
             loginResp.actid = uid;
             loginResp.susertoken = usertoken;
 
@@ -139,7 +139,7 @@ namespace NorenRestApiWrapper
 
             LogoutMessage logout = new LogoutMessage();
             logout.uid = loginReq.uid;
-            
+
             string uri = "Logout";
             var ResponseHandler = new NorenApiResponse<LogoutResponse>(response);
             rClient.makeRequest(ResponseHandler, uri, logout.toJson(), getJKey);
@@ -151,7 +151,7 @@ namespace NorenRestApiWrapper
             if (loginResp == null)
                 return false;
 
-            
+
             changepwd.uid = loginReq.uid;
             changepwd.oldpwd = ComputeSha256Hash(changepwd.oldpwd);
             string uri = "Changepwd";
@@ -165,14 +165,14 @@ namespace NorenRestApiWrapper
                 return false;
 
             productConversion.uid = loginReq.uid;
-            
+
             string uri = "ProductConversion";
             var ResponseHandler = new NorenApiResponse<ProductConversionResponse>(response);
             rClient.makeRequest(ResponseHandler, uri, productConversion.toJson(), getJKey);
             return true;
         }
         public bool SendForgotPassword(OnResponse response, string endpoint, string user, string pan, string dob)
-        {            
+        {
             ForgotPassword forgotPassword = new ForgotPassword();
             forgotPassword.uid = user;
             forgotPassword.pan = pan;
@@ -192,24 +192,41 @@ namespace NorenRestApiWrapper
                 return false;
 
             UserDetails userDetails = new UserDetails();
-            userDetails.uid  = loginReq.uid;
+            userDetails.uid = loginReq.uid;
             string uri = "UserDetails";
-            
+
             rClient.makeRequest(new NorenApiResponse<UserDetailsResponse>(response), uri, userDetails.toJson(), getJKey);
             return true;
         }
-        public bool SendGetMWList(OnResponse response)
+        
+        public bool SendGetWatchListNames(OnResponse response)
         {
             if (loginResp == null)
                 return false;
 
             UserDetails userDetails = new UserDetails();
             userDetails.uid = loginReq.uid;
+
             string uri = "MWList";
 
             rClient.makeRequest(new NorenApiResponse<MWListResponse>(response), uri, userDetails.toJson(), getJKey);
             return true;
         }
+        public bool SendGetWatchList(OnResponse response, string wlname)
+        {
+            if (loginResp == null)
+                return false;
+
+            MWList mWList = new MWList();
+            mWList.uid = loginReq.uid;
+            mWList.wlname = wlname;
+
+            string uri = "MarketWatch";
+
+            rClient.makeRequest(new NorenApiResponse<MarketWatchResponse>(response), uri, mWList.toJson(), getJKey);
+            return true;
+        }
+
         public bool SendSearchScrip(OnResponse response, string exch, string searchtxt)
         {
             if (loginResp == null)
@@ -224,7 +241,7 @@ namespace NorenRestApiWrapper
             rClient.makeRequest(new NorenApiResponse<SearchScripResponse>(response), uri, searchScrip.toJson(), getJKey);
             return true;
         }
-        
+
         public bool SendGetSecurityInfo(OnResponse response, string exch, string token)
         {
             if (loginResp == null)
@@ -245,7 +262,7 @@ namespace NorenRestApiWrapper
                 return false;
 
             AddMultiScripsToMW addMultiScripsToMW = new AddMultiScripsToMW();
-            addMultiScripsToMW.uid  = loginReq.uid;
+            addMultiScripsToMW.uid = loginReq.uid;
             addMultiScripsToMW.wlname = watchlist;
             addMultiScripsToMW.scrips = scrips;
             string uri = "AddMultiScripsToMW";
@@ -268,7 +285,17 @@ namespace NorenRestApiWrapper
             return true;
         }
         #region order methods
-        public bool SendPlaceOrder(OnResponse response ,PlaceOrder order)
+        public bool SendPlaceGTTOrder(OnResponse response, PlaceGTTOrder order)
+        {
+            if (loginResp == null)
+                return false;
+
+            string uri = "PlaceGTTOrder";
+
+            rClient.makeRequest(new NorenApiResponse<PlaceGTTOrderResponse>(response), uri, order.toJson(), getJKey);
+            return true;
+        }
+        public bool SendPlaceOrder(OnResponse response, PlaceOrder order)
         {
             if (loginResp == null)
                 return false;
@@ -287,7 +314,7 @@ namespace NorenRestApiWrapper
             string uri = "ModifyOrder";
 
             rClient.makeRequest(new NorenApiResponse<ModifyOrderResponse>(response), uri, order.toJson(), getJKey);
-            return true;            
+            return true;
         }
         public bool SendCancelOrder(OnResponse response, string norenordno)
         {
@@ -376,7 +403,7 @@ namespace NorenRestApiWrapper
 
             string uri = "PositionBook";
             PositionBook positionBook = new PositionBook();
-            positionBook.uid   = loginReq.uid;
+            positionBook.uid = loginReq.uid;
             positionBook.actid = account;
 
             rClient.makeRequest(new NorenApiResponseList<PositionBookResponse, PositionBookItem>(response), uri, positionBook.toJson(), getJKey);
@@ -404,7 +431,7 @@ namespace NorenRestApiWrapper
             Limits limits = new Limits();
             limits.actid = account;
             limits.uid = loginReq.uid;
-            if(product != "")
+            if (product != "")
                 limits.prd = product;
             if (segment != "")
                 limits.seg = segment;
@@ -478,7 +505,7 @@ namespace NorenRestApiWrapper
             quote.token = token;
             if (String.IsNullOrEmpty(starttime) != true)
                 quote.st = starttime;
-            if(String.IsNullOrEmpty(endtime) != true)
+            if (String.IsNullOrEmpty(endtime) != true)
                 quote.et = endtime;
             if (String.IsNullOrEmpty(interval) != true)
                 quote.intrv = interval;
@@ -504,7 +531,7 @@ namespace NorenRestApiWrapper
         }
 
         public bool GetDailyTPSeries(OnResponse response, string endpoint, string exch, string token, string starttime, string endtime)
-        {           
+        {
             return true;
         }
 
@@ -543,7 +570,7 @@ namespace NorenRestApiWrapper
 
         public void CloseWatcher()
         {
-            wsclient?.Stop();            
+            wsclient?.Stop();
         }
 
         public OnStreamConnect onStreamConnectCallback
@@ -551,7 +578,7 @@ namespace NorenRestApiWrapper
             get;
             set;
         }
-       
+
         public OnCloseHandler onStreamCloseCallback
         {
             get;
@@ -679,7 +706,7 @@ namespace NorenRestApiWrapper
             subs.k = String.Empty;
             foreach (var quote in tokenlist)
             {
-                if(String.IsNullOrEmpty(subs.k))
+                if (String.IsNullOrEmpty(subs.k))
                     subs.k = quote.exch + "|" + quote.token;
                 else
                     subs.k += "#" + quote.exch + "|" + quote.token;
@@ -691,7 +718,7 @@ namespace NorenRestApiWrapper
 
 
         public bool SubscribeOrders(OnOrderFeed orderFeed, string account)
-        {            
+        {
             OrderSubscribeMessage orderSubscribe = new OrderSubscribeMessage();
             orderSubscribe.actid = account;
             wsclient.Send(orderSubscribe.toJson());
@@ -699,7 +726,7 @@ namespace NorenRestApiWrapper
             Console.WriteLine($"Sub Order: {orderSubscribe.toJson()}");
             return true;
         }
-        
-        
+
+
     }
 }

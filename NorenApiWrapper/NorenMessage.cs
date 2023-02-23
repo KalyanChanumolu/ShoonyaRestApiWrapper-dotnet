@@ -11,10 +11,12 @@ using static NorenApiWrapper.NorenApiHelpers;
 namespace NorenRestApiWrapper
 {
     #region basetypes
+
     public class NorenResponseMsg
     {//all resapi messages will be returned here
         public string stat;
         public string emsg;
+
         public virtual string toJson()
         {
             string json = string.Empty;
@@ -30,10 +32,12 @@ namespace NorenRestApiWrapper
             return json;
         }
     }
+
     public class StandardResponse : NorenResponseMsg
     {
         public string request_time;
     }
+
     public class NorenMessage
     {
         public virtual string toJson()
@@ -43,12 +47,14 @@ namespace NorenRestApiWrapper
             return prefix + json;
         }
     }
+
     public class NorenListResponseMsg<T> : StandardResponse
     {
         public NorenListResponseMsg()
         {
             list = new List<T>();
         }
+
         public void Copy(NorenResponseMsg baseObject)
         {
             this.stat = baseObject.stat;
@@ -93,10 +99,13 @@ namespace NorenRestApiWrapper
 
         public List<T> list;
     }
+
     #region WebSocket Stream Messages
+
     public class NorenStreamMessage
     {
         public string t;
+
         public virtual string toJson()
         {
             string json = JsonConvert.SerializeObject(this, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
@@ -104,7 +113,8 @@ namespace NorenRestApiWrapper
             return json;
         }
     }
-    #endregion
+
+    #endregion WebSocket Stream Messages
 
     public class ConnectMessage : NorenStreamMessage
     {
@@ -119,8 +129,8 @@ namespace NorenRestApiWrapper
         {
             t = "t";
         }
-        public string k;
 
+        public string k;
     }
 
     public class SubscribeDepth : NorenStreamMessage
@@ -129,8 +139,8 @@ namespace NorenRestApiWrapper
         {
             t = "d";
         }
-        public string k;
 
+        public string k;
     }
 
     public class UnSubscribeTouchline : NorenStreamMessage
@@ -139,8 +149,8 @@ namespace NorenRestApiWrapper
         {
             t = "u";
         }
-        public string k;
 
+        public string k;
     }
 
     public class UnSubscribeDepth : NorenStreamMessage
@@ -149,8 +159,8 @@ namespace NorenRestApiWrapper
         {
             t = "ud";
         }
-        public string k;
 
+        public string k;
     }
 
     public class OrderSubscribeMessage : NorenStreamMessage
@@ -159,8 +169,10 @@ namespace NorenRestApiWrapper
         {
             t = "o";
         }
+
         public string actid;
     }
+
     public class NorenFeed : NorenStreamMessage
     {
         public string e;
@@ -186,40 +198,43 @@ namespace NorenRestApiWrapper
         public string tsq;
         public string bq1;
         public string bq2;
-		public string bq3;
-		public string bq4;
-		public string bq5;
-		public string bp1;
-		public string bp2;
-		public string bp3;
-		public string bp4;
-		public string bp5;
-		public string bo1;
-		public string bo2;
-		public string bo3;
-		public string bo4;
-		public string bo5;
-		public string sq1;
-		public string sq2;
-		public string sq3;
-		public string sq4;
-		public string sq5;
-		public string sp1;
-		public string sp2;
-		public string sp3;
-		public string sp4;
-		public string sp5;
-		public string so1;
-		public string so2;
-		public string so3;
-		public string so4;
-		public string so5;
-		public string lc;
-		public string uc;
+        public string bq3;
+        public string bq4;
+        public string bq5;
+        public string bp1;
+        public string bp2;
+        public string bp3;
+        public string bp4;
+        public string bp5;
+        public string bo1;
+        public string bo2;
+        public string bo3;
+        public string bo4;
+        public string bo5;
+        public string sq1;
+        public string sq2;
+        public string sq3;
+        public string sq4;
+        public string sq5;
+        public string sp1;
+        public string sp2;
+        public string sp3;
+        public string sp4;
+        public string sp5;
+        public string so1;
+        public string so2;
+        public string so3;
+        public string so4;
+        public string so5;
+        public string lc;
+        public string uc;
+
         [JsonProperty(PropertyName = "52h")]
         public string h52;
+
         [JsonProperty(PropertyName = "52l")]
-        public string l52;        
+        public string l52;
+
         public string ft;
     }
 
@@ -261,7 +276,8 @@ namespace NorenRestApiWrapper
         public string exch_tm;
     }
 
-    #endregion
+    #endregion basetypes
+
     public class LoginMessage : NorenMessage
     {
         public string apkversion;
@@ -274,7 +290,6 @@ namespace NorenRestApiWrapper
         public string vc;
         public string appkey;
     }
-
 
     public class LoginResponse : NorenResponseMsg
     {
@@ -298,9 +313,8 @@ namespace NorenRestApiWrapper
     public class LogoutResponse : NorenResponseMsg
     {
         public string request_time;
-
-
     }
+
     public class UserDetails : NorenMessage
     {
         public string uid;
@@ -310,6 +324,7 @@ namespace NorenRestApiWrapper
     {
         //[{"prd":"C","s_prdt_ali":"CNC","exch":["NSE","BSE"]
         public string prd;
+
         public string s_prdt_ali;
         public List<string> exch;
     }
@@ -326,17 +341,16 @@ namespace NorenRestApiWrapper
         public string uprev;
         public string request_time;
     }
-    
+
     public class ForgotPassword : NorenMessage
     {
         public string uid;
         public string pan;
         public string dob;
     }
+
     public class ForgotPasswordResponse : StandardResponse
     {
-
-
     }
 
     public class Changepwd : NorenMessage
@@ -345,6 +359,7 @@ namespace NorenRestApiWrapper
         public string oldpwd;
         public string pwd;
     }
+
     public class ChangepwdResponse : NorenResponseMsg
     {
         public string request_time;
@@ -356,16 +371,19 @@ namespace NorenRestApiWrapper
         public string uid;
         public string wlname;
     }
+
     public class MWListResponse : NorenResponseMsg
     {
         public List<string> values;
         public string request_time;
     }
+
     public class MarketWatch : NorenMessage
     {
         public string uid;
         public string wlname;
     }
+
     public class MarketWatchItem
     {
         public string exch;
@@ -375,22 +393,26 @@ namespace NorenRestApiWrapper
         public string ti;
         public string ls;
     }
+
     public class MarketWatchResponse : NorenResponseMsg
     {
         public List<MarketWatchItem> values;
         public string request_time;
     }
+
     public class SearchScrip : NorenMessage
     {
         public string uid;
         public string stext;
         public string exch;
+
         public override string toJson()
         {
             stext = HttpUtility.UrlEncode(stext);
             return base.toJson();
         }
     }
+
     public class ScripItem
     {
         public string exch;
@@ -474,6 +496,8 @@ namespace NorenRestApiWrapper
         public string trantype3;
         public string qty3;
         public string prc3;
+        public string mkt_protection;
+
         public override string toJson()
         {
             tsym = HttpUtility.UrlEncode(tsym);
@@ -483,11 +507,13 @@ namespace NorenRestApiWrapper
             return base.toJson();
         }
     }
+
     public class PlaceOrderResponse : NorenResponseMsg
     {
         public string request_time;
         public string norenordno;
     }
+
     public class ModifyOrder : NorenMessage
     {
         public string exch;
@@ -502,37 +528,54 @@ namespace NorenRestApiWrapper
         public string bpprc;
         public string blprc;
         public string trailprc;
+
         public override string toJson()
         {
             tsym = HttpUtility.UrlEncode(tsym);
             return base.toJson();
         }
     }
+
     public class ModifyOrderResponse : NorenResponseMsg
     {
         public string request_time;
         public string norenordno;
     }
+
     public class CancelOrder : NorenMessage
     {
         public string norenordno;
         public string uid;
     }
+
     public class CancelOrderResponse : NorenResponseMsg
     {
         public string request_time;
         public string norenordno;
     }
+
+    public class CancelGTTOrder : NorenMessage
+    {
+        public string al_id;
+        public string uid;
+    }
+
+    public class CancelGTTOrderResponse : NorenResponseMsg
+    {
+        public string al_id;
+        public string request_time;
+        public string stat;
+    }
+
     public class ExitSNOOrder : NorenMessage
     {
         public string norenordno;
         public string prd;
         public string uid;
     }
+
     public class ExitSNOOrderResponse : StandardResponse
     {
-
-
     }
 
     public class ProductConversion : NorenMessage
@@ -551,13 +594,14 @@ namespace NorenRestApiWrapper
 
     public class ProductConversionResponse : StandardResponse
     {
-
     }
+
     public class OrderBook : NorenMessage
     {
         public string uid;
         public string prd;
     }
+
     public class OrderBookItem
     {
         public string exch;
@@ -593,13 +637,44 @@ namespace NorenRestApiWrapper
         public string extm;
         public string snoordt;
         public string snonum;
-
     }
+
     public class OrderBookResponse : NorenListResponseMsg<OrderBookItem>
     {
         public List<OrderBookItem> Orders => list;
-
     }
+
+    public class PendingGTTOrderItem
+    {
+        public string stat { get; set; }
+        public string ai_t { get; set; }
+        public string al_id { get; set; }
+        public string tsym { get; set; }
+        public string exch { get; set; }
+        public string token { get; set; }
+        public string remarks { get; set; }
+        public string validity { get; set; }
+        public string norentm { get; set; }
+        public string pp { get; set; }
+        public string ls { get; set; }
+        public string ti { get; set; }
+        public string brkname { get; set; }
+        public string actid { get; set; }
+        public string trantype { get; set; }
+        public string prctyp { get; set; }
+        public int qty { get; set; }
+        public string prc { get; set; }
+        public string C { get; set; }
+        public string prd { get; set; }
+        public string ordersource { get; set; }
+        public string d { get; set; }
+    }
+
+    public class PendingGTTOrderBookResponse : NorenListResponseMsg<PendingGTTOrderItem>
+    {
+        public List<PendingGTTOrderItem> PendingGTTOrders => list;
+    }
+
     public class MultiLegOrderBook : NorenMessage
     {
         public string uid;
@@ -610,6 +685,7 @@ namespace NorenRestApiWrapper
     {
         public List<MultiLegOrderBookItem> mlorders => list;
     }
+
     public class MultiLegOrderBookItem
     {
         public string exch;
@@ -661,11 +737,11 @@ namespace NorenRestApiWrapper
         public string prd;
     }
 
-
     public class TradeBookResponse : NorenListResponseMsg<TradeBookItem>
     {
         public List<TradeBookItem> trades => list;
     }
+
     public class TradeBookItem
     {
         public string exch;
@@ -694,8 +770,9 @@ namespace NorenRestApiWrapper
         public string ordersource;
         public string token;
         public string request_time;
-	public string exch_tm;
+        public string exch_tm;
     }
+
     public class ExchMsg : NorenMessage
     {
         public string uid;
@@ -706,11 +783,13 @@ namespace NorenRestApiWrapper
     {
         public List<ExchMsgItem> messages => list;
     }
+
     public class ExchMsgItem
     {
         public string exchmsg;
         public string exchtm;
     }
+
     public class PositionBook : NorenMessage
     {
         public string uid;
@@ -721,6 +800,7 @@ namespace NorenRestApiWrapper
     {
         public List<PositionBookItem> positions => list;
     }
+
     public class PositionBookItem
     {
         public string exch;
@@ -760,12 +840,14 @@ namespace NorenRestApiWrapper
         public string ti;
         public string ls;
     }
+
     public class Holdings : NorenMessage
     {
         public string uid;
         public string actid;
         public string prd;
     }
+
     public class HoldingsItem
     {
         public List<ScripItem> exch_tsym;
@@ -795,6 +877,7 @@ namespace NorenRestApiWrapper
             }
         }
     }
+
     public class Limits : NorenMessage
     {
         public string uid;
@@ -803,25 +886,34 @@ namespace NorenRestApiWrapper
         public string seg;
         public string exch;
     }
+
     public class LimitsResponse : StandardResponse
     {
         public string actid;
         public string prd;
         public string seg;
         public string exch;
+
         //-------------------------Cash Primary Fields-------------------------------
         public string cash;
+
         public string payin;
         public string payout;
+
         //-------------------------Cash Additional Fields-------------------------------
         public string brkcollamt;
+
         public string unclearedcash;
         public string daycash;
+
         //-------------------------Margin Utilized----------------------------------
         public string marginused;
+
         public string mtomcurper;
+
         //-------------------------Margin Used components---------------------
         public string cbu;
+
         public string csc;
         public string rpnl;
         public string unmtom;
@@ -837,14 +929,20 @@ namespace NorenRestApiWrapper
         public string brokerage;
         public string collateral;
         public string grcoll;
+
         //-------------------------Additional Risk Limits---------------------------
         public string turnoverlmt;
+
         public string pendordvallmt;
+
         //-------------------------Additional Risk Indicators---------------------------
         public string turnover;
+
         public string pendordval;
+
         //-------------------------Margin used detailed breakup fields-------------------------
         public string rzpnl_e_i;
+
         public string rzpnl_e_m;
         public string rzpnl_e_c;
         public string rzpnl_d_i;
@@ -918,12 +1016,14 @@ namespace NorenRestApiWrapper
         public string brkage_c_h;
         public string brkage_c_b;
     }
+
     public class GetSecurityInfo : NorenMessage
     {
         public string uid;
         public string exch;
         public string token;
     }
+
     public class GetSecurityInfoResponse : StandardResponse
     {
         public string exch;
@@ -966,11 +1066,13 @@ namespace NorenRestApiWrapper
         public string uc;
         public string lc;
     }
+
     public class SingleOrdHist : NorenMessage
     {
         public string uid;
         public string norenordno;
     }
+
     public class SingleOrdHistItem
     {
         public string exch;
@@ -1006,10 +1108,10 @@ namespace NorenRestApiWrapper
         public string ordenttm;
         public string extm;
     }
+
     public class OrderHistoryResponse : NorenListResponseMsg<SingleOrdHistItem>
     {
         public List<SingleOrdHistItem> history => list;
-
     }
 
     public class OrderMargin : NorenMessage
@@ -1032,18 +1134,21 @@ namespace NorenRestApiWrapper
         public string orgtrgprc;
         public string norenordno;
         public string snonum;
+
         public override string toJson()
         {
             tsym = HttpUtility.UrlEncode(tsym);
             return base.toJson();
         }
     }
+
     public class GetOrderMarginResponse : NorenResponseMsg
     {
         public string remarks;
         public string cash;
         public string marginused;
     }
+
     public class BasketListItem
     {
         public string exch;
@@ -1055,6 +1160,7 @@ namespace NorenRestApiWrapper
         public string trantype;
         public string prctyp;
     }
+
     public class BasketMargin : NorenMessage
     {
         public string uid;
@@ -1075,6 +1181,7 @@ namespace NorenRestApiWrapper
         public string norenordno;
         public string snonum;
         public List<BasketListItem> basketlists;
+
         public override string toJson()
         {
             tsym = HttpUtility.UrlEncode(tsym);
@@ -1085,6 +1192,7 @@ namespace NorenRestApiWrapper
             return base.toJson();
         }
     }
+
     public class GetBasketMarginResponse : NorenResponseMsg
     {
         public string remarks;
@@ -1158,7 +1266,6 @@ namespace NorenRestApiWrapper
         public string toi;
     }
 
-
     public class TPSeries : NorenMessage
     {
         public string uid;
@@ -1169,7 +1276,6 @@ namespace NorenRestApiWrapper
         public string intrv;
     }
 
-   
     public class TPSeriesItem
     {
         public string time;
@@ -1183,23 +1289,24 @@ namespace NorenRestApiWrapper
         public string intoi;
         public string oi;
     }
-    
+
     public class GetTPSeriesResponse : NorenListResponseMsg<TPSeriesItem>
     {
         public List<TPSeriesItem> values => list;
-
     }
+
     public class IndexList : NorenMessage
     {
         public string uid;
-        public string exch;        
+        public string exch;
     }
 
     public class IndexListItem
     {
         public string idxname;
-        public string token;        
+        public string token;
     }
+
     public class GetIndexListResponse : NorenResponseMsg
     {
         public List<IndexListItem> values;
@@ -1213,9 +1320,10 @@ namespace NorenRestApiWrapper
         public string tsym;
         public string strprc;
         public string cnt;
+
         public override string toJson()
         {
-            tsym = HttpUtility.UrlEncode(tsym);            
+            tsym = HttpUtility.UrlEncode(tsym);
             return base.toJson();
         }
     }
@@ -1237,6 +1345,4 @@ namespace NorenRestApiWrapper
         public List<OptionChainItem> values;
         public string request_time;
     }
-
-
 }

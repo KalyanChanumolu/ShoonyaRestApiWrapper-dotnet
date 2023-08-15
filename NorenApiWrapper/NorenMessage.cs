@@ -453,6 +453,7 @@ namespace NorenRestApiWrapper
         public string qty;
         public string prc;
         public string dscqty;
+        public string ordersource = "WEB";
 
         public override string toJson()
         {
@@ -464,8 +465,85 @@ namespace NorenRestApiWrapper
 
     public class PlaceGTTOrderResponse : NorenResponseMsg
     {
+        public string al_id;
         public string request_time;
-        public string norenordno;
+        public string stat;
+    }
+
+    public class PlaceOCOOrder
+    {
+        public string uid;
+        public string tsym;
+        public string exch;
+
+        public string validity = "GTT";
+        public string prd;
+        public string trantype;
+        public string prctyp;
+        public string ret;
+
+        public string GTTGreaterThanValue;
+        public string Order1Quantity;
+        public string Order1LimitPrice;
+        public string Order1TriggerPrice;
+
+
+        public string GTTLessThanValue;
+        public string Order2Quantity;
+        public string Order2LimitPrice;
+        public string Order2TriggerPrice;
+    }
+
+    public class ModifyOCOOrder : PlaceOCOOrder
+    {
+        public string al_id;
+    }
+
+    internal class OCORequest : NorenMessage
+    {
+        public string uid;
+
+        public string al_id;
+
+        public string ai_t = "LMT_BOS_O";
+
+        public string tsym;
+
+        public string exch;
+
+        public string validity;
+
+        [JsonProperty("oivariable")]
+        public List<Oivariable> Oivariable;
+
+        [JsonProperty("place_order_params")]
+        public PlaceGTTOrder PlaceOrderParams;
+
+        [JsonProperty("place_order_params_leg2")]
+        public PlaceGTTOrder PlaceOrderParamsLeg2;
+
+        public override string toJson()
+        {
+            tsym = HttpUtility.UrlEncode(tsym);
+            return base.toJson();
+        }
+    }
+
+
+    public class Oivariable
+    {
+        [JsonProperty("d")]
+        public string Value { get; set; }
+
+        [JsonProperty("var_name")]
+        public string VarName { get; set; }
+    }
+
+    public class PlaceOCOOrderResponse : NorenResponseMsg
+    {
+        public string al_id;
+        public string request_time;
+        public string stat;
     }
 
     public class PlaceOrder : NorenMessage
@@ -523,6 +601,7 @@ namespace NorenRestApiWrapper
         public string qty;
         public string tsym;
         public string ret;
+        public string remarks;
         public string trgprc;
         public string uid;
         public string bpprc;

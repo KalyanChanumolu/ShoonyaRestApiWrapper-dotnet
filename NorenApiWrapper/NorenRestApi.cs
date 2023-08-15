@@ -301,6 +301,108 @@ namespace NorenRestApiWrapper
 
         #region order methods
 
+        public bool SendPlaceOCOOrder(OnResponse response, PlaceOCOOrder order)
+        {
+            if (loginResp == null)
+                return false;
+
+            string uri = "PlaceOCOOrder";
+
+            var ocoRequest = new OCORequest
+            {
+                uid = order.uid,
+                exch = order.exch,
+                tsym = order.tsym,
+                validity = order.validity,
+
+                Oivariable = new List<Oivariable> {
+                    new Oivariable { VarName = "x", Value = order.GTTGreaterThanValue },
+                    new Oivariable { VarName = "y", Value = order.GTTLessThanValue }
+                },
+                PlaceOrderParams = new PlaceGTTOrder
+                {
+                    actid = order.uid,
+                    uid = order.uid,
+                    exch = order.exch,
+                    tsym = order.tsym,
+                    trantype = order.trantype,
+                    prctyp = order.prctyp,
+                    prd = order.prd,
+                    ret = order.ret,
+                    qty = order.Order1Quantity,
+                    prc = order.Order1LimitPrice,
+                },
+                PlaceOrderParamsLeg2 = new PlaceGTTOrder
+                {
+                    actid = order.uid,
+                    uid = order.uid,
+                    exch = order.exch,
+                    tsym = order.tsym,
+                    trantype = order.trantype,
+                    prctyp = order.prctyp,
+                    prd = order.prd,
+                    ret = order.ret,
+                    qty = order.Order2Quantity,
+                    prc = order.Order2LimitPrice,
+                }
+            };
+
+            rClient.makeRequest(new NorenApiResponse<PlaceOCOOrderResponse>(response), uri, ocoRequest.toJson(), getJKey);
+            return true;
+        }
+
+        public bool SendModifyOCOOrder(OnResponse response, ModifyOCOOrder order)
+        {
+            if (loginResp == null)
+                return false;
+
+            string uri = "ModifyOCOOrder";
+
+            var ocoRequest = new OCORequest
+            {
+                al_id = order.al_id,
+                
+                uid = order.uid,
+                exch = order.exch,
+                tsym = order.tsym,
+                validity = order.validity,
+                
+                Oivariable = new List<Oivariable> {
+                    new Oivariable { VarName = "x", Value = order.GTTGreaterThanValue },
+                    new Oivariable { VarName = "y", Value = order.GTTLessThanValue }
+                },
+                PlaceOrderParams = new PlaceGTTOrder
+                {
+                    actid = order.uid,
+                    uid = order.uid,
+                    exch = order.exch,
+                    tsym = order.tsym,
+                    trantype = order.trantype,
+                    prctyp = order.prctyp,
+                    prd = order.prd,
+                    ret = order.ret,
+                    qty = order.Order1Quantity,
+                    prc = order.Order1LimitPrice,
+                },
+                PlaceOrderParamsLeg2 = new PlaceGTTOrder
+                {
+                    actid = order.uid,
+                    uid = order.uid,
+                    exch = order.exch,
+                    tsym = order.tsym,
+                    trantype = order.trantype,
+                    prctyp = order.prctyp,
+                    prd = order.prd,
+                    ret = order.ret,
+                    qty = order.Order2Quantity,
+                    prc = order.Order2LimitPrice,
+                }
+            };
+
+            rClient.makeRequest(new NorenApiResponse<PlaceOCOOrderResponse>(response), uri, ocoRequest.toJson(), getJKey);
+            return true;
+        }
+
         public bool SendPlaceGTTOrder(OnResponse response, PlaceGTTOrder order)
         {
             if (loginResp == null)

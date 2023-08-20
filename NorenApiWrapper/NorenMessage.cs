@@ -452,6 +452,7 @@ namespace NorenRestApiWrapper
         public string actid;
         public string qty;
         public string prc;
+        public string trgprc;
         public string dscqty;
         public string ordersource = "WEB";
 
@@ -743,10 +744,20 @@ namespace NorenRestApiWrapper
         public string prctyp { get; set; }
         public int qty { get; set; }
         public string prc { get; set; }
+        public string trgprc { get; set; }
         public string C { get; set; }
         public string prd { get; set; }
         public string ordersource { get; set; }
         public string d { get; set; }
+
+        [JsonProperty("oivariable")]
+        public List<Oivariable> Oivariable;
+
+        [JsonProperty("place_order_params")]
+        public PlaceGTTOrder PlaceOrderParams;
+
+        [JsonProperty("place_order_params_leg2")]
+        public PlaceGTTOrder PlaceOrderParamsLeg2;
     }
 
     public class PendingGTTOrderBookResponse : NorenListResponseMsg<PendingGTTOrderItem>

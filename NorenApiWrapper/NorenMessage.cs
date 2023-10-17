@@ -488,7 +488,6 @@ namespace NorenRestApiWrapper
         public string Order1LimitPrice;
         public string Order1TriggerPrice;
 
-
         public string GTTLessThanValue;
         public string Order2Quantity;
         public string Order2LimitPrice;
@@ -526,10 +525,12 @@ namespace NorenRestApiWrapper
         public override string toJson()
         {
             tsym = HttpUtility.UrlEncode(tsym);
+            PlaceOrderParams.tsym = HttpUtility.UrlEncode(PlaceOrderParams.tsym);
+            PlaceOrderParamsLeg2.tsym = HttpUtility.UrlEncode(PlaceOrderParamsLeg2.tsym);
+            Console.WriteLine(base.toJson());
             return base.toJson();
         }
     }
-
 
     public class Oivariable
     {

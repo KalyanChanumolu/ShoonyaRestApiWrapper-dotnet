@@ -692,8 +692,25 @@ namespace NorenRestApiWrapper
             return true;
         }
 
-        public bool GetDailyTPSeries(OnResponse response, string endpoint, string exch, string token, string starttime, string endtime)
+        public bool GetDailyTPSeries(OnResponse response, string exch, string tradingsymbol, string startdate = null, string enddate = null)
         {
+            if (loginResp == null)
+                return false;
+
+            string uri = "EODChartData";
+
+            DailyPriceSeries series = new DailyPriceSeries();
+
+            series.uid = loginReq.uid;
+            series.sym = $"{exch}:{tradingsymbol}";
+            series.from = String.IsNullOrEmpty(startdate) != true
+                ? startdate
+                : ((DateTimeOffset)DateTime.Today.AddDays(-7)).ToUnixTimeSeconds().ToString();
+            series.to = String.IsNullOrEmpty(enddate) != true
+                ? enddate
+                : ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+
+            rClient.makeRequest(new NorenApiResponseList<GetDailyPriceSeriesResponse, DailyPriceSeriesItem>(response), uri, series.toJson(), getJKey);
             return true;
         }
 

@@ -1386,6 +1386,30 @@ namespace NorenRestApiWrapper
         public List<TPSeriesItem> values => list;
     }
 
+    public class DailyPriceSeries : NorenMessage
+    {
+        public string uid;
+        public string sym;
+        public string from;
+        public string to;
+    }
+
+    public class DailyPriceSeriesItem
+    {
+        public string time;
+        public string into;
+        public string inth;
+        public string intl;
+        public string intc;
+        public string intv;
+        public string ssboe;
+    }
+
+    public class GetDailyPriceSeriesResponse : NorenListResponseMsg<DailyPriceSeriesItem>
+    {
+        public List<DailyPriceSeriesItem> values => list;
+    }
+
     public class IndexList : NorenMessage
     {
         public string uid;
